@@ -7,17 +7,17 @@ class BotonUno extends StatelessWidget{
   final String texto;
   @override
   Widget build(context){
-    return OutlinedButton(
+    return FilledButton(
         onPressed: funcion,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.all(20),
+        style: const ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 106, 46, 134)),
+          padding: MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.all(20)),
         ),
         child: Text(
           texto,
           style: const TextStyle(
-            color: Colors.white,
             fontSize: 20,
+            color: Colors.white,
           ),
         ),
 
