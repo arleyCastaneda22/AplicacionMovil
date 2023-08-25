@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:beauty_soft/pagina_inicio/paginaInicio.dart';
+import 'package:beauty_soft/login_registro/login.dart';
 
 class Init extends StatefulWidget{
   const Init({super.key});
@@ -16,8 +17,15 @@ class _InitState extends State<Init> {  @override
 
   @override
   void initState() {
-    paginaActual = PaginaInicio();
+    paginaActual = PaginaInicio(iniciarSesion: goToLogin,);
     super.initState;
+  }
+
+  void goToLogin(){
+    setState(() {
+      paginaActual = Login();
+    });
+    print("Clickeando!");
   }
 
   @override
@@ -25,16 +33,6 @@ class _InitState extends State<Init> {  @override
     return MaterialApp(
       home: Scaffold(
         body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 106, 46, 134),
-                  Color.fromARGB(255, 197, 97, 69),
-                ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
           child: paginaActual,
         ),
       ),
