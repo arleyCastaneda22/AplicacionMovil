@@ -4,14 +4,11 @@ import 'package:beauty_soft/componentes_reutilizables/boton.dart';
 class PaginaInicio extends StatelessWidget{
   const PaginaInicio({
     super.key,
-    this.iniciarSesion,
-    this.registrarse,
-    this.recuperarContrasenna
+    this.pagina
   });
 
-  final void Function()? iniciarSesion;
-  final void Function()? registrarse;
-  final void Function()? recuperarContrasenna;
+  final void Function(Widget pagina)? pagina;
+
 
   @override
   Widget build(context){
@@ -50,7 +47,7 @@ class PaginaInicio extends StatelessWidget{
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                BotonUno(texto: "Iniciar Sesión", funcion: iniciarSesion,),
+                BotonUno(texto: "Iniciar Sesión", funcion: pagina,),
                 SizedBox(width: 20,),
                 BotonUno(texto: "Registrarse"),
               ],

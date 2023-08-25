@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:beauty_soft/pagina_inicio/paginaInicio.dart';
 import 'package:beauty_soft/login_registro/login.dart';
+import 'package:beauty_soft/home/home.dart';
 
 class Init extends StatefulWidget{
   const Init({super.key});
@@ -11,21 +12,25 @@ class Init extends StatefulWidget{
   }
 }
 
-class _InitState extends State<Init> {  @override
-
+class _InitState extends State<Init> {
+  @override
   Widget? paginaActual;
 
   @override
   void initState() {
-    paginaActual = PaginaInicio(iniciarSesion: goToLogin,);
+    paginaActual = PaginaInicio(pagina: cambioDePagina,);
     super.initState;
   }
 
-  void goToLogin(){
+  // init.dart > paginaInicio.dart > todas las otras paginas que actualicen
+  // el componente principal
+  //recibe un widget
+  //en caso de ser una página con más de una redireccion se puede
+  // escoger a cual de todas ir con el selector
+  void cambioDePagina(Widget pagina){
     setState(() {
-      paginaActual = Login();
+      paginaActual = pagina;
     });
-    print("Clickeando!");
   }
 
   @override

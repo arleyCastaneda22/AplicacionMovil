@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:beauty_soft/componentes_reutilizables/boton.dart';
 
 class Login extends StatelessWidget {
-  const Login({super.key});
+  final Function(Widget pagina)? cambiarPagina;
+
+  const Login({this.cambiarPagina ,super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -89,15 +92,7 @@ class Login extends StatelessWidget {
                             Container(
                               width: 250,
                               height: 40,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    elevation: 8, backgroundColor: Colors.purple),
-                                onPressed: () {},
-                                child: const Text(
-                                  'Login',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
+                              child: BotonDos(texto: "Login", funcion: cambiarPagina,),
                             ),
                           ],
                         ),
