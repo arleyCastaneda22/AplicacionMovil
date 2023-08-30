@@ -3,15 +3,16 @@ import 'package:beauty_soft/login_registro/login.dart';
 import 'package:beauty_soft/home/home.dart';
 
 class BotonUno extends StatelessWidget{
-  BotonUno({this.funcion,super.key, required this.texto});
+  BotonUno({this.funcion,super.key, required this.texto, this.pagina});
 
   final void Function(Widget pagina)? funcion;
+  final Widget? pagina;
   final String texto;
   @override
   Widget build(context){
     return FilledButton(
         onPressed: (){
-          funcion!(Login(cambiarPagina: funcion,));
+          funcion!(pagina!);
         },
         style: const ButtonStyle(
           backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 106, 46, 134)),

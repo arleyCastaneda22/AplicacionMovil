@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:beauty_soft/componentes_reutilizables/boton.dart';
 
 class Login extends StatelessWidget {
-  final Function(Widget pagina)? cambiarPagina;
+  final void Function(Widget pagina)? cambiarPagina;
 
   const Login({this.cambiarPagina ,super.key});
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:beauty_soft/componentes_reutilizables/boton.dart';
+import 'package:beauty_soft/login_registro/login.dart';
+import 'package:beauty_soft/login_registro/registro.dart';
 
 class PaginaInicio extends StatelessWidget{
   const PaginaInicio({
@@ -47,9 +49,9 @@ class PaginaInicio extends StatelessWidget{
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                BotonUno(texto: "Iniciar Sesión", funcion: pagina,),
+                BotonUno(texto: "Iniciar Sesión", funcion: pagina, pagina: Login(cambiarPagina: pagina,),),
                 SizedBox(width: 20,),
-                BotonUno(texto: "Registrarse"),
+                BotonUno(texto: "Registrarse", funcion:pagina, pagina: Registro(cambiarPagina: pagina,),),
               ],
             ),
           ],
