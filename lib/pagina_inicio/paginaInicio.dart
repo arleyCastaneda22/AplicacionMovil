@@ -43,14 +43,14 @@ class PaginaInicio extends StatelessWidget{
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 BotonUno(texto: "Iniciar Sesión", funcion: pagina, pagina: Login(cambiarPagina: pagina,),),
-                SizedBox(width: 20,),
+                const SizedBox(width: 20,),
                 BotonUno(texto: "Registrarse", funcion:pagina, pagina: Registro(cambiarPagina: pagina,),),
               ],
             ),

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
-
-class NuevaCita extends StatefulWidget{
+class NuevaCita extends StatefulWidget {
   @override
-  State<NuevaCita> createState(){
+  State<NuevaCita> createState() {
     return _NuevaCitaState();
   }
 }
 
-class _NuevaCitaState extends State<NuevaCita>{
+class _NuevaCitaState extends State<NuevaCita> {
   // Controladores para los campos del formulario
   final TextEditingController fechaController = TextEditingController();
   final TextEditingController horaController = TextEditingController();
-  String selectedOption1 = 'Andrea';
-  String selectedOption2 = 'Corte dama';
+
+  // Opciones para el campo de selección
+  List<String> opciones = ['Andrea', 'Corte dama'];
+  String selectedOption = 'Andrea';
 
   @override
   void dispose() {
@@ -23,114 +24,135 @@ class _NuevaCitaState extends State<NuevaCita>{
   }
 
   @override
-  Widget build(context){
+  Widget build(context) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            const Text('Ingrese una fecha:'),
-            TextFormField(
-              controller: fechaController,
-              onTap: () async {
-                DateTime? selectedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2101),
-                );
-                if (selectedDate != null) {
-                  fechaController.text =
-                  "${selectedDate.toLocal()}".split(' ')[0];
-                }
-              },
-              readOnly: true,
-              decoration: const InputDecoration(
-                hintText: 'Seleccione una fecha',
-                prefixIcon: Icon(Icons.calendar_today),
+        child: Form(
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                  ),
+                  hintText: 'Ingrese nombre de servicio',
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Color.fromRGBO(118, 118, 118, 1),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            const Text('Ingrese una hora:'),
-            TextFormField(
-              controller: horaController,
-              onTap: () async {
-                TimeOfDay? selectedTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-                if (selectedTime != null) {
-                  horaController.text = selectedTime.format(context);
-                }
-              },
-              readOnly: true,
-              decoration: const InputDecoration(
-                hintText: 'Seleccione una hora',
-                prefixIcon: Icon(Icons.access_time),
+              const SizedBox(height: 16),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                  ),
+                  hintText: 'Duración(minutos)',
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Color.fromRGBO(118, 118, 118, 1),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            const Text('Seleccione un estilista:'),
-            DropdownButton<String>(
-              value: selectedOption1,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedOption1 = newValue!;
-                });
-              },
-              items: <String>['Andrea', 'Camila', 'Marcela', 'William']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16.0),
-            const Text('Seleccione un servicio:'),
-            DropdownButton<String>(
-              value: selectedOption2,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedOption2 = newValue!;
-                });
-              },
-              items: <String>['Corte dama', 'Chocolaterapia', 'Uñas', 'Corte caballero']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              style:
-              const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll<Color>(Colors.purple),
-                elevation: MaterialStatePropertyAll(8),
+              const SizedBox(height: 16),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                  ),
+                  hintText: 'Ingrese precio',
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Color.fromRGBO(118, 118, 118, 1),
+                  ),
+                ),
               ),
-              onPressed: () {
-                //  TODO
-              },
-              child: const Text(
-                  'Enviar'
+              const SizedBox(height: 16),
+              // Campo de selección personalizado
+              Container(
+                width: double.infinity, // Ancho máximo posible
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  border: Border.all(
+                    color: const Color.fromRGBO(116, 90, 242, 10),
+                  ),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: selectedOption,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedOption = newValue!;
+                      });
+                    },
+                    items:
+                        opciones.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
-            ),
-          ],
+
+              const SizedBox(
+                height: 16,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Acción del botón
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromRGBO(
+                      116, 90, 242, 10), // Cambia el color del botón
+                ),
+                child: const SizedBox(
+                  width: 500, // Ancho deseado del botón
+                  child: Center(
+                    child: Text(
+                      'Enviar',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-void modalNuevaCita(BuildContext context){
+void modalNuevaCita(BuildContext context) {
   showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context){
-        return NuevaCita();
-      }
+    context: context,
+    builder: (BuildContext context) {
+      return NuevaCita();
+    },
   );
-
 }

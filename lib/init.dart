@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:beauty_soft/pagina_inicio/paginaInicio.dart';
-import 'package:beauty_soft/login_registro/login.dart';
-import 'package:beauty_soft/home/home.dart';
 
 class Init extends StatefulWidget{
   const Init({super.key});
@@ -14,6 +12,7 @@ class Init extends StatefulWidget{
 
 class _InitState extends State<Init> {
   @override
+  // ignore: override_on_non_overriding_member
   Widget? paginaActual;
 
   @override
