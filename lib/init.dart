@@ -21,11 +21,6 @@ class _InitState extends State<Init> {
     super.initState;
   }
 
-  // init.dart > paginaInicio.dart > todas las otras paginas que actualicen
-  // el componente principal
-  //recibe un widget
-  //en caso de ser una página con más de una redireccion se puede
-  // escoger a cual de todas ir con el selector
   void cambioDePagina(Widget pagina){
     setState(() {
       paginaActual = pagina;

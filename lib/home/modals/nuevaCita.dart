@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:beauty_soft/models/estilista.model.dart';
+import '../../models/servicios.model.dart';
+import '../../services/servicios.dart';
 
 class NuevaCita extends StatefulWidget {
   @override
@@ -8,19 +11,32 @@ class NuevaCita extends StatefulWidget {
 }
 
 class _NuevaCitaState extends State<NuevaCita> {
-  // Controladores para los campos del formulario
-  final TextEditingController fechaController = TextEditingController();
-  final TextEditingController horaController = TextEditingController();
+  final TextEditingController nombreServicio = TextEditingController();
+  final TextEditingController duracion = TextEditingController();
+  final TextEditingController precio = TextEditingController();
+  List<ServiciosModel> servicios = [];
+  List<EstilistaModel> selectedEstilistas = [];
+  List<EstilistaModel> estilistas = [];
+  EstilistaModel? selectedEstilista;
 
-  // Opciones para el campo de selección
-  List<String> opciones = ['Andrea', 'Corte dama'];
-  String selectedOption = 'Andrea';
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  void dispose() {
-    fechaController.dispose();
-    horaController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    setState(() {});
+    try {
+      estilistas = await Servicios().getEstilista();
+      servicios = await Servicios().getServicios();
+    } catch (error) {
+      throw Exception();
+    } finally {
+      setState(() {});
+    }
   }
 
   @override
@@ -29,17 +45,29 @@ class _NuevaCitaState extends State<NuevaCita> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               TextFormField(
+                controller: nombreServicio,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, ingrese el nombre del servicio';
+                  } else if (!RegExp(r'^[a-zA-Z ]{3,30}$').hasMatch(value)) {
+                    return 'El nombre del servicio debe contener solo letras y tener entre 3 y 30 caracteres';
+                  }
+                  return null;
+                },
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(116, 90, 242, 10),
+                    ),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(116, 90, 242, 10),
+                    ),
                   ),
                   hintText: 'Ingrese nombre de servicio',
                   hintStyle: TextStyle(
@@ -50,15 +78,24 @@ class _NuevaCitaState extends State<NuevaCita> {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                controller: duracion,
                 keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, ingrese la duración del servicio';
+                  }
+                  return null;
+                },
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(116, 90, 242, 10),
+                    ),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(116, 90, 242, 10),
+                    ),
                   ),
                   hintText: 'Duración(minutos)',
                   hintStyle: TextStyle(
@@ -69,15 +106,24 @@ class _NuevaCitaState extends State<NuevaCita> {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                controller: precio,
                 keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, ingrese el precio del servicio';
+                  }
+                  return null;
+                },
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(116, 90, 242, 10),
+                    ),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromRGBO(116, 90, 242, 10)),
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(116, 90, 242, 10),
+                    ),
                   ),
                   hintText: 'Ingrese precio',
                   hintStyle: TextStyle(
@@ -86,10 +132,8 @@ class _NuevaCitaState extends State<NuevaCita> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              // Campo de selección personalizado
               Container(
-                width: double.infinity, // Ancho máximo posible
+                width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
@@ -98,37 +142,60 @@ class _NuevaCitaState extends State<NuevaCita> {
                   ),
                 ),
                 child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: selectedOption,
-                    onChanged: (String? newValue) {
+                  child: DropdownButton<EstilistaModel>(
+                    value: selectedEstilista,
+                    onChanged: (EstilistaModel? newValue) {
                       setState(() {
-                        selectedOption = newValue!;
+                        selectedEstilista = newValue;
                       });
                     },
-                    items:
-                        opciones.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                    items: estilistas.map<DropdownMenuItem<EstilistaModel>>(
+                      (EstilistaModel estilista) {
+                        return DropdownMenuItem<EstilistaModel>(
+                          value: estilista,
+                          child:
+                              Text('${estilista.nombre} ${estilista.apellido}'),
+                        );
+                      },
+                    ).toList(),
                   ),
                 ),
               ),
-
-              const SizedBox(
-                height: 16,
-              ),
+              if (selectedEstilista == null)
+                const Text(
+                  'Por favor, seleccione un estilista.',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 12.0,
+                  ),
+                ),
+              const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
-                  // Acción del botón
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    // El formulario es válido, puedes realizar acciones aquí.
+                    Servicios serviciosInstance = Servicios();
+                    serviciosInstance
+                        .enviarDatos(
+                      nombreServicio.text,
+                      int.parse(duracion.text),
+                      int.parse(precio.text),
+                      selectedEstilistas,
+                    )
+                        .then((result) {
+                      // Actualizar la lista principal después de agregar un nuevo servicio
+                      Navigator.of(context).pop();
+                      setState(() {
+                        _fetchData();
+                      });
+                    });
+                  }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromRGBO(
-                      116, 90, 242, 10), // Cambia el color del botón
+                  backgroundColor: const Color.fromRGBO(116, 90, 242, 10),
                 ),
                 child: const SizedBox(
-                  width: 500, // Ancho deseado del botón
+                  width: 500,
                   child: Center(
                     child: Text(
                       'Enviar',
@@ -148,8 +215,8 @@ class _NuevaCitaState extends State<NuevaCita> {
   }
 }
 
-void modalNuevaCita(BuildContext context) {
-  showModalBottomSheet(
+void modalNuevaCita(BuildContext context) async {
+  await showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
       return NuevaCita();
