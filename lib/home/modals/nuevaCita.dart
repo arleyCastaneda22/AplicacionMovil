@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:beauty_soft/models/estilista.model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../models/servicios.model.dart';
 import '../../services/servicios.dart';
 
@@ -28,7 +29,6 @@ class _NuevaCitaState extends State<NuevaCita> {
   }
 
   Future<void> _fetchData() async {
-    setState(() {});
     try {
       estilistas = await Servicios().getEstilista();
       servicios = await Servicios().getServicios();
@@ -132,6 +132,7 @@ class _NuevaCitaState extends State<NuevaCita> {
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -143,10 +144,13 @@ class _NuevaCitaState extends State<NuevaCita> {
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<EstilistaModel>(
-                    value: selectedEstilista,
+                    value: null,
                     onChanged: (EstilistaModel? newValue) {
                       setState(() {
-                        selectedEstilista = newValue;
+                        if (newValue != null &&
+                            !selectedEstilistas.contains(newValue)) {
+                          selectedEstilistas.add(newValue);
+                        }
                       });
                     },
                     items: estilistas.map<DropdownMenuItem<EstilistaModel>>(
@@ -161,9 +165,38 @@ class _NuevaCitaState extends State<NuevaCita> {
                   ),
                 ),
               ),
-              if (selectedEstilista == null)
+              if (selectedEstilistas.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Estilistas Seleccionados:',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Wrap(
+                      spacing: 8,
+                      children: selectedEstilistas.map((estilista) {
+                        return Chip(
+                          label:
+                              Text('${estilista.nombre} ${estilista.apellido}'),
+                          onDeleted: () {
+                            setState(() {
+                              selectedEstilistas.remove(estilista);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              if (selectedEstilistas.isEmpty)
                 const Text(
-                  'Por favor, seleccione un estilista.',
+                  'Por favor, seleccione al menos un estilista.',
                   style: TextStyle(
                     color: Colors.red,
                     fontSize: 12.0,
@@ -183,11 +216,16 @@ class _NuevaCitaState extends State<NuevaCita> {
                       selectedEstilistas,
                     )
                         .then((result) {
-                      // Actualizar la lista principal después de agregar un nuevo servicio
-                      Navigator.of(context).pop();
-                      setState(() {
-                        _fetchData();
-                      });
+                      Fluttertoast.showToast(
+                        msg: "Guardado exitoso",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 4,
+                        backgroundColor: const Color.fromRGBO(116, 90, 242, 10),
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                      Navigator.of(context).pop(result);
                     });
                   }
                 },
@@ -213,13 +251,4 @@ class _NuevaCitaState extends State<NuevaCita> {
       ),
     );
   }
-}
-
-void modalNuevaCita(BuildContext context) async {
-  await showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return NuevaCita();
-    },
-  );
 }

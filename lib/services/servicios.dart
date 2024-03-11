@@ -81,6 +81,7 @@ class Servicios {
       );
 
       if (response.statusCode == 200) {
+        print('entró');
         return true;
       } else if (response.statusCode == 400) {
         final jsonResponse = jsonDecode(response.body);
@@ -93,6 +94,57 @@ class Servicios {
       }
     } catch (error) {
       return false;
+    }
+  }
+
+  Future<ServiciosModel> getOneServicio(String id) async {
+    try {
+      var url = Uri.parse("http://localhost:5000/api/servicios/$id");
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        ServiciosModel servicio = ServiciosModel.fromJson(data);
+        return servicio;
+      } else {
+        throw Exception(
+            'Error durante la solicitud HTTP: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<bool> editarServicio(String id, String nombreservicio, int duracion,
+      int precio, List<EstilistaModel> estilistas) async {
+    try {
+      var url = 'http://localhost:5000/api/servicios/$id';
+      List<String> idEstilistas = estilistas.map((e) => e.id).toList();
+      Map<String, dynamic> datos = {
+        'nombre_servicio': nombreservicio,
+        'duracion': duracion,
+        'precio': precio,
+        'estilista': idEstilistas
+      };
+
+      final response = await http.put(
+        Uri.parse(url),
+        body: jsonEncode(datos),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else if (response.statusCode == 400) {
+        final jsonResponse = jsonDecode(response.body);
+        final errorMessage =
+            jsonResponse['message'] ?? 'Error 400: Error desconocido';
+
+        return errorMessage;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

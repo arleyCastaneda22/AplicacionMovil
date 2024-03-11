@@ -1,3 +1,4 @@
+import 'package:beauty_soft/home/modals/editarServicio.dart';
 import 'package:flutter/material.dart';
 import 'package:beauty_soft/home/modals/nuevaCita.dart';
 import '../models/servicios.model.dart';
@@ -37,6 +38,17 @@ class _HomeState extends State<Home> {
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _openNuevaCitaModal() async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return NuevaCita();
+      },
+    );
+    setState(() {});
+    await _fetchData();
   }
 
   @override
@@ -169,7 +181,9 @@ class _HomeState extends State<Home> {
                                           scaffoldMessenger.showSnackBar(
                                             const SnackBar(
                                               content: Text(
-                                                  'Error: No se puede cambiar el estado. El servicio tiene citas asociadas.'),
+                                                'Error: No se puede cambiar el estado. El servicio tiene citas asociadas.',
+                                              ),
+                                              backgroundColor: Colors.red,
                                             ),
                                           );
                                         } else {
@@ -209,7 +223,21 @@ class _HomeState extends State<Home> {
                                   Visibility(
                                     visible: servicio.estado,
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Servicios intancia = Servicios();
+                                        intancia
+                                            .getOneServicio(servicio.id)
+                                            .then((value) =>
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditarServicio(
+                                                            servicioId:
+                                                                servicio.id),
+                                                  ),
+                                                ));
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color.fromRGBO(
                                             6, 215, 156, 10),
@@ -246,7 +274,7 @@ class _HomeState extends State<Home> {
               child: ElevatedButton(
                 onPressed: () {
                   //modal nueva cita
-                  modalNuevaCita(context);
+                  _openNuevaCitaModal();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(116, 90, 242, 10),
