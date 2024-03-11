@@ -7,7 +7,7 @@ import '../models/servicios.model.dart';
 class Servicios {
   Future<List<ServiciosModel>> getServicios() async {
     try {
-      var url = Uri.http('localhost:5000', '/api/servicios');
+      var url = Uri.https('beautyapi-1.onrender.com', '/api/servicios');
       final response = await http.get(url);
       List<dynamic> data = jsonDecode(response.body);
       List<ServiciosModel> servicio =
@@ -25,7 +25,7 @@ class Servicios {
 
   Future<List<EstilistaModel>> getEstilista() async {
     try {
-      var url = Uri.http('localhost:5000', '/api/estilistas');
+      var url = Uri.https('beautyapi-1.onrender.com', '/api/estilistas');
       final response = await http.get(url);
       List<dynamic> data = jsonDecode(response.body);
       List<EstilistaModel> estilista =
@@ -43,7 +43,7 @@ class Servicios {
 
   Future<String> actualizarEstado(String id) async {
     try {
-      var url = Uri.http('localhost:5000', '/api/servicios/estado/$id');
+      var url = Uri.https('beautyapi-1.onrender.com', '/api/servicios/estado/$id');
       final response = await http.get(url);
 
       if (response.statusCode == 204) {
@@ -73,7 +73,7 @@ class Servicios {
     };
 
     try {
-      var url = 'http://localhost:5000/api/servicios/';
+      var url = 'https://beautyapi-1.onrender.com/api/servicios/';
       final response = await http.post(
         Uri.parse(url),
         body: jsonEncode(datos),
@@ -99,7 +99,7 @@ class Servicios {
 
   Future<ServiciosModel> getOneServicio(String id) async {
     try {
-      var url = Uri.parse("http://localhost:5000/api/servicios/$id");
+      var url = Uri.parse("https://beautyapi-1.onrender.com/api/servicios/$id");
       final response = await http.get(url);
       if (response.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(response.body);
@@ -117,7 +117,7 @@ class Servicios {
   Future<bool> editarServicio(String id, String nombreservicio, int duracion,
       int precio, List<EstilistaModel> estilistas) async {
     try {
-      var url = 'http://localhost:5000/api/servicios/$id';
+      var url = 'https://beautyapi-1.onrender.com/api/servicios/$id';
       List<String> idEstilistas = estilistas.map((e) => e.id).toList();
       Map<String, dynamic> datos = {
         'nombre_servicio': nombreservicio,

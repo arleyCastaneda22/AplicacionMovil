@@ -1,4 +1,5 @@
 import 'package:beauty_soft/home/home.dart';
+import 'package:beauty_soft/login_registro/recuperarContrasena.dart';
 import 'package:beauty_soft/services/login.dart';
 import 'package:flutter/material.dart';
 
@@ -188,16 +189,25 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 60,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          '¿Olvidaste tu contraseña?',
-                          style: TextStyle(
-                              color: Color.fromRGBO(116, 90, 242, 10)),
-                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Recuperar()),
+                            );
+                          },
+                          child: const Text(
+                            '¿Olvidaste tu contraseña?',
+                            style: TextStyle(
+                                color: Color.fromRGBO(116, 90, 242, 10)),
+                          ),
+                        )
                       ],
                     ),
                   ),
