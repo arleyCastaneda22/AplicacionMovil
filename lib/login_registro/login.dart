@@ -179,7 +179,10 @@ class _LoginState extends State<Login> {
                               backgroundColor:
                                   const Color.fromRGBO(116, 90, 242, 10),
                             ),
-                            child: const Text('Iniciar sesión'),
+                            child: const Text(
+                              'Iniciar sesión',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ],

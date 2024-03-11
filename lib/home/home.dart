@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text(
           'Beautysoft',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         actions: [
           Padding(
@@ -279,7 +279,10 @@ class _HomeState extends State<Home> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(116, 90, 242, 10),
                 ),
-                child: const Text("Agregar servicio"),
+                child: const Text(
+                  "Agregar servicio",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ),
