@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:beauty_soft/models/estilista.model.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../../models/servicios.model.dart';
 import '../../services/servicios.dart';
 
@@ -216,14 +215,12 @@ class _NuevaCitaState extends State<NuevaCita> {
                       selectedEstilistas,
                     )
                         .then((result) {
-                      Fluttertoast.showToast(
-                        msg: "Guardado exitoso",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 4,
-                        backgroundColor: const Color.fromRGBO(116, 90, 242, 10),
-                        textColor: Colors.white,
-                        fontSize: 16.0,
+                      final scaffoldMessenger = ScaffoldMessenger.of(context);
+                      scaffoldMessenger.showSnackBar(
+                        const SnackBar(
+                          content: Text('Guardado exitoso'),
+                          backgroundColor: Color.fromRGBO(116, 90, 242, 10),
+                        ),
                       );
                       Navigator.of(context).pop(result);
                     });

@@ -1,4 +1,3 @@
-import 'package:beauty_soft/home/home.dart';
 import 'package:beauty_soft/login_registro/login.dart';
 import 'package:flutter/material.dart';
 

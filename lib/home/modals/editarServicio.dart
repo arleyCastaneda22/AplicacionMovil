@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../../models/estilista.model.dart';
 import '../../models/servicios.model.dart';
 import '../../services/servicios.dart';
@@ -224,16 +223,6 @@ class _EditarServicioState extends State<EditarServicio> {
                                 selectedEstilistas,
                               )
                                   .then((result) {
-                                Fluttertoast.showToast(
-                                  msg: "Actualización exitosa",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 4,
-                                  backgroundColor:
-                                      const Color.fromRGBO(116, 90, 242, 10),
-                                  textColor: Colors.white,
-                                  fontSize: 16.0,
-                                );
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
