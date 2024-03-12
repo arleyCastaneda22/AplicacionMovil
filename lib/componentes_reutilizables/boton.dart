@@ -46,7 +46,7 @@ class BotonDos extends StatelessWidget {
       /*ElevatedButton.styleFrom(
           elevation: 8, backgroundColor: Colors.purple),*/
       onPressed: () {
-        funcion!(const Home());
+        funcion!(Home());
       },
       child: Text(
         texto,

@@ -43,7 +43,8 @@ class Servicios {
 
   Future<String> actualizarEstado(String id) async {
     try {
-      var url = Uri.https('beautyapi-1.onrender.com', '/api/servicios/estado/$id');
+      var url =
+          Uri.https('beautyapi-1.onrender.com', '/api/servicios/estado/$id');
       final response = await http.get(url);
 
       if (response.statusCode == 204) {

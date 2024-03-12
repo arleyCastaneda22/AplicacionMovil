@@ -1,11 +1,13 @@
 import 'package:beauty_soft/home/modals/editarServicio.dart';
+import 'package:beauty_soft/login_registro/login.dart';
 import 'package:flutter/material.dart';
 import 'package:beauty_soft/home/modals/nuevaCita.dart';
 import '../models/servicios.model.dart';
 import '../services/servicios.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final String? correo;
+  const Home({this.correo, Key? key}) : super(key: key);
 
   @override
   State<Home> createState() {
@@ -51,6 +53,37 @@ class _HomeState extends State<Home> {
     await _fetchData();
   }
 
+  Future<void> _confirmarCerrarSesion() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar Cierre de Sesión'),
+          content: const Text('¿Estás seguro de que quieres cerrar sesión?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el modal
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Login(),
+                  ),
+                );
+              },
+              child: const Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,40 +99,26 @@ class _HomeState extends State<Home> {
           ),
         ],
         backgroundColor: const Color.fromRGBO(116, 90, 242, 10),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: Drawer(
         child: Column(
           children: [
-            const UserAccountsDrawerHeader(
-              accountName: Text("Nombre de Usuario"),
-              accountEmail: Text("usuario@example.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/profile_image.jpg'),
+            UserAccountsDrawerHeader(
+              accountName: const Text("Administrador"),
+              accountEmail: Text(widget.correo ?? ""),
+              currentAccountPicture: const CircleAvatar(
+                backgroundImage: AssetImage('assets/images/usuarioss.png'),
               ),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color.fromRGBO(116, 90, 242, 10),
               ),
-            ),
-            ListTile(
-              title: const Text("Mi Perfil"),
-              leading: const Icon(Icons.person),
-              onTap: () {
-                // modal para cambiar "Mi Perfil" aquí--------
-              },
             ),
             ListTile(
               title: const Text("Cerrar Sesión"),
               leading: const Icon(Icons.exit_to_app),
               onTap: () {
-                // sacar el modal de deseas "Cerrar Sesión" aquí----------
-              },
-            ),
-            const Spacer(),
-            ListTile(
-              title: const Text("Configuración"),
-              leading: const Icon(Icons.settings),
-              onTap: () {
-                // contenido o acción del botón de Configuración aquí
+                _confirmarCerrarSesion();
               },
             ),
           ],
@@ -141,7 +160,7 @@ class _HomeState extends State<Home> {
                         height: 200,
                         child: Card(
                           clipBehavior: Clip.antiAlias,
-                          elevation: 5.0,
+                          elevation: 8.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
@@ -149,7 +168,14 @@ class _HomeState extends State<Home> {
                           child: Column(
                             children: [
                               ListTile(
-                                title: Text(nombreServicioCapitalizado),
+                                title: Text(
+                                  nombreServicioCapitalizado,
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(116, 90, 242, 10),
+                                  ),
+                                ),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -183,13 +209,17 @@ class _HomeState extends State<Home> {
                                               content: Text(
                                                 'Error: No se puede cambiar el estado. El servicio tiene citas asociadas.',
                                               ),
-                                              backgroundColor: Colors.red,
+                                              backgroundColor: Color.fromRGBO(
+                                                  116, 90, 242, 10),
                                             ),
                                           );
                                         } else {
                                           scaffoldMessenger.showSnackBar(
                                             SnackBar(
                                               content: Text(resultado),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      116, 90, 242, 10),
                                             ),
                                           );
                                           setState(() {
@@ -201,6 +231,8 @@ class _HomeState extends State<Home> {
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
                                       backgroundColor: servicio.estado
                                           ? const Color.fromRGBO(
                                               116, 90, 242, 10)
@@ -247,6 +279,8 @@ class _HomeState extends State<Home> {
                                           Icon(
                                             Icons.edit,
                                             color: Colors.white,
+                                            size:
+                                                24.0, // Ajusta el tamaño del ícono
                                           ),
                                           SizedBox(width: 5),
                                           Text(

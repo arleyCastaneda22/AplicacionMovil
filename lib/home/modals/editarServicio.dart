@@ -66,6 +66,15 @@ class _EditarServicioState extends State<EditarServicio> {
               key: _formKey,
               child: Column(
                 children: [
+                  const Text(
+                    'Editar Servicio',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(116, 90, 242, 10),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: nombreServicio,
                     validator: (value) {
@@ -88,6 +97,7 @@ class _EditarServicioState extends State<EditarServicio> {
                           color: Color.fromRGBO(116, 90, 242, 10),
                         ),
                       ),
+                      labelText: 'Nombre del servicio',
                       hintText: 'Ingrese nombre de servicio',
                       hintStyle: TextStyle(
                         fontSize: 14,
@@ -116,6 +126,7 @@ class _EditarServicioState extends State<EditarServicio> {
                           color: Color.fromRGBO(116, 90, 242, 10),
                         ),
                       ),
+                      labelText: 'Duración',
                       hintText: 'Duración(minutos)',
                       hintStyle: TextStyle(
                         fontSize: 14,
@@ -144,6 +155,7 @@ class _EditarServicioState extends State<EditarServicio> {
                           color: Color.fromRGBO(116, 90, 242, 10),
                         ),
                       ),
+                      labelText: 'Precio',
                       hintText: 'Ingrese precio',
                       hintStyle: TextStyle(
                         fontSize: 14,
@@ -151,39 +163,35 @@ class _EditarServicioState extends State<EditarServicio> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(
-                        color: const Color.fromRGBO(116, 90, 242, 10),
-                      ),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<EstilistaModel>(
-                        value: null, // No necesitas establecer un valor aquí
-                        onChanged: (EstilistaModel? newValue) {
-                          setState(() {
-                            if (newValue != null &&
-                                !selectedEstilistas.contains(newValue)) {
-                              selectedEstilistas.add(newValue);
-                            }
-                          });
-                        },
-                        items: estilistas.map<DropdownMenuItem<EstilistaModel>>(
-                          (EstilistaModel estilista) {
-                            return DropdownMenuItem<EstilistaModel>(
-                              value: estilista,
-                              child: Text(
-                                  '${estilista.nombre} ${estilista.apellido}'),
-                            );
-                          },
-                        ).toList(),
-                      ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<EstilistaModel>(
+                    value: null,
+                    onChanged: (EstilistaModel? newValue) {
+                      setState(() {
+                        if (newValue != null &&
+                            !selectedEstilistas.contains(newValue)) {
+                          selectedEstilistas.add(newValue);
+                        }
+                      });
+                    },
+                    items: estilistas.map<DropdownMenuItem<EstilistaModel>>(
+                      (EstilistaModel estilista) {
+                        return DropdownMenuItem<EstilistaModel>(
+                          value: estilista,
+                          child: Text(
+                            '${estilista.nombre} ${estilista.apellido}',
+                          ),
+                        );
+                      },
+                    ).toList(),
+                    decoration: const InputDecoration(
+                      labelText: 'Seleccionar Estilista',
                     ),
                   ),
                   // Show selected estilistas
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Wrap(
                     children: selectedEstilistas.map((estilista) {
                       return Chip(
@@ -198,53 +206,81 @@ class _EditarServicioState extends State<EditarServicio> {
                     }).toList(),
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        Servicios serviciosInstance = Servicios();
-                        serviciosInstance
-                            .editarServicio(
-                          widget.servicioId,
-                          nombreServicio.text,
-                          int.parse(duracion.text),
-                          int.parse(precio.text),
-                          selectedEstilistas,
-                        )
-                            .then((result) {
-                          Fluttertoast.showToast(
-                            msg: "Actualización exitosa",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 4,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              Servicios serviciosInstance = Servicios();
+                              serviciosInstance
+                                  .editarServicio(
+                                widget.servicioId,
+                                nombreServicio.text,
+                                int.parse(duracion.text),
+                                int.parse(precio.text),
+                                selectedEstilistas,
+                              )
+                                  .then((result) {
+                                Fluttertoast.showToast(
+                                  msg: "Actualización exitosa",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 4,
+                                  backgroundColor:
+                                      const Color.fromRGBO(116, 90, 242, 10),
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Home(),
+                                  ),
+                                );
+                              });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 const Color.fromRGBO(116, 90, 242, 10),
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Home(),
+                          ),
+                          child: const Text(
+                            'Enviar',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
                             ),
-                          );
-                        });
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(116, 90, 242, 10),
-                    ),
-                    child: const SizedBox(
-                      width: 500,
-                      child: Center(
-                        child: Text(
-                          'Enviar',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
                           ),
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Home(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromRGBO(116, 90, 242, 10),
+                          ),
+                          child: const Text(
+                            'Volver',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   )
                 ],
               ),
