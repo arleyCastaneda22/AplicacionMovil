@@ -1,3 +1,4 @@
+import 'package:beauty_soft/home/citas.dart';
 import 'package:beauty_soft/home/modals/editarServicio.dart';
 import 'package:beauty_soft/login_registro/login.dart';
 import 'package:flutter/material.dart';
@@ -113,6 +114,18 @@ class _HomeState extends State<Home> {
               decoration: const BoxDecoration(
                 color: Color.fromRGBO(116, 90, 242, 10),
               ),
+            ),
+            ListTile(
+              title: const Text("Citas"),
+              leading: const Icon(Icons.event),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CitasAdmin(),
+                  ),
+                );
+              },
             ),
             ListTile(
               title: const Text("Cerrar Sesión"),
