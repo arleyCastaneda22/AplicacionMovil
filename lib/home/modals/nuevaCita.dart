@@ -45,6 +45,8 @@ class _NuevaCitaState extends State<NuevaCita> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
+          autovalidateMode: AutovalidateMode
+              .onUserInteraction, // Activar validación automática
           child: Column(
             children: [
               TextFormField(
@@ -204,8 +206,12 @@ class _NuevaCitaState extends State<NuevaCita> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    // El formulario es válido, puedes realizar acciones aquí.
+                  if (_formKey.currentState!.validate() &&
+                      nombreServicio.text.isNotEmpty &&
+                      duracion.text.isNotEmpty &&
+                      precio.text.isNotEmpty &&
+                      selectedEstilistas.isNotEmpty) {
+                    // El formulario es válido y todos los campos están llenos.
                     Servicios serviciosInstance = Servicios();
                     serviciosInstance
                         .enviarDatos(
@@ -224,6 +230,16 @@ class _NuevaCitaState extends State<NuevaCita> {
                       );
                       Navigator.of(context).pop(result);
                     });
+                  } else {
+                    // Muestra un mensaje de error si algún campo está vacío.
+                    final scaffoldMessenger = ScaffoldMessenger.of(context);
+                    scaffoldMessenger.showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                            'Por favor, complete todos los campos y seleccione al menos un estilista.'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(
