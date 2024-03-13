@@ -57,7 +57,7 @@ class _EditarServicioState extends State<EditarServicio> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(50.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -203,7 +203,7 @@ class _EditarServicioState extends State<EditarServicio> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      width: 200,
+                      width: 150,
                       child: ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
@@ -241,7 +241,7 @@ class _EditarServicioState extends State<EditarServicio> {
                       ),
                     ),
                     SizedBox(
-                      width: 200,
+                      width: 150,
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pushReplacement(
