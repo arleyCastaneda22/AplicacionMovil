@@ -231,15 +231,15 @@ class _NuevaCitaState extends State<NuevaCita> {
                       Navigator.of(context).pop(result);
                     });
                   } else {
-                    // Muestra un mensaje de error si algún campo está vacío.
-                    final scaffoldMessenger = ScaffoldMessenger.of(context);
-                    scaffoldMessenger.showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            'Por favor, complete todos los campos y seleccione al menos un estilista.'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
+                    // // Muestra un mensaje de error si algún campo está vacío.
+                    // final scaffoldMessenger = ScaffoldMessenger.of(context);
+                    // scaffoldMessenger.showSnackBar(
+                    //   const SnackBar(
+                    //     content: Text(
+                    //         'Por favor, complete todos los campos y seleccione al menos un estilista.'),
+                    //     backgroundColor: Colors.red,
+                    //   ),
+                    // );
                   }
                 },
                 style: ElevatedButton.styleFrom(
