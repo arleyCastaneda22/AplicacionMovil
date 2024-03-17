@@ -1,11 +1,15 @@
+import 'package:beauty_soft/componentes_reutilizables/drawer.dart';
 import 'package:beauty_soft/models/citas.model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../login_registro/login.dart';
 import '../services/citas.dart';
+import 'home.dart';
 
 class CitasAdmin extends StatefulWidget {
-  const CitasAdmin({Key? key}) : super(key: key);
+  final String? correo;
+  const CitasAdmin({this.correo, Key? key}) : super(key: key);
 
   @override
   State<CitasAdmin> createState() => _CitasAdminState();
@@ -37,6 +41,37 @@ class _CitasAdminState extends State<CitasAdmin> {
     }
   }
 
+  Future<void> _confirmarCerrarSesion() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar Cierre de Sesión'),
+          content: const Text('¿Estás seguro de que quieres cerrar sesión?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el modal
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Login(),
+                  ),
+                );
+              },
+              child: const Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +88,26 @@ class _CitasAdminState extends State<CitasAdmin> {
             child: Image.asset('assets/images/logo_beautysoft.png'),
           ),
         ],
+      ),
+      drawer: CustomDrawer(
+        correo: widget.correo ?? "",
+        onCitasPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CitasAdmin(),
+            ),
+          );
+        },
+        onServicios: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Home(),
+            ),
+          );
+        },
+        onCerrarSesionPressed: _confirmarCerrarSesion,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

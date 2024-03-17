@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decode/jwt_decode.dart';
 
 class Autenticacion {
-  Future<String?> enviarDatos(String correo, String contrasena) async {
+  Future<Map<String, dynamic>?> enviarDatos(
+      String correo, String contrasena) async {
     Map<String, dynamic> datos = {'email': correo, 'contrasena': contrasena};
     try {
       var url = 'https://beautyapi-1.onrender.com/login';
@@ -14,14 +16,26 @@ class Autenticacion {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(response.body);
-        return data['token'];
+        String token = data['token'];
+        Map<String, dynamic> decodedToken = Jwt.parseJwt(token);
+        List<dynamic>? roles = decodedToken['roles'];
+        String? id = decodedToken['_id'];
+
+        // Verificar si roles es null o no está definido
+        if (roles == null || id == null) {
+          return null;
+        }
+
+        // Convertir roles a una lista de cadenas
+        List<String> roleNames = roles.map((role) => role.toString()).toList();
+        return {'roles': roleNames, 'id': id};
       } else if (response.statusCode == 403 || response.statusCode == 400) {
         return null;
       } else {
-        return 'Error login';
+        return {'error': 'Error login'};
       }
     } catch (error) {
-      return '$error';
+      return {'error': '$error'};
     }
   }
 
@@ -37,16 +51,15 @@ class Autenticacion {
 
       if (response.statusCode == 200) {
         // Éxito, el correo fue enviado correctamente
-        print('Correo enviado correctamente');
-        print(jsonDecode(response.body));
+
+        jsonDecode(response.body);
       } else {
         // Error en la petición
-        print('Error en la petición: ${response.statusCode}');
-        print(jsonDecode(response.body));
+
+        jsonDecode(response.body);
       }
     } catch (error) {
       // Error de conexión
-      print('Error de conexión: $error');
     }
   }
 }

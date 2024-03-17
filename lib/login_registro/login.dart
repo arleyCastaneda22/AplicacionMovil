@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:beauty_soft/home/home.dart';
+import 'package:beauty_soft/home/citas.dart';
+import 'package:beauty_soft/home/citasEstilista.dart';
 import 'package:beauty_soft/login_registro/recuperarContrasena.dart';
 import 'package:beauty_soft/services/login.dart';
 
@@ -10,7 +11,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'BeautySoft',
       home: Login(),
     );
@@ -27,16 +28,22 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  late TextEditingController correo = TextEditingController();
-  late TextEditingController contrasena = TextEditingController();
-  final _formKey =
-      GlobalKey<FormState>(); // Añadido un GlobalKey para el formulario
+  late TextEditingController correo;
+  late TextEditingController contrasena;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     correo = TextEditingController();
     contrasena = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    correo.dispose();
+    contrasena.dispose();
+    super.dispose();
   }
 
   @override
@@ -88,7 +95,7 @@ class _LoginState extends State<Login> {
                 ],
               ),
               Form(
-                key: _formKey, // Asignado el GlobalKey al formulario
+                key: _formKey,
                 child: SizedBox(
                   width: 250,
                   child: Column(
@@ -118,7 +125,6 @@ class _LoginState extends State<Login> {
                             if (value == null || value.isEmpty) {
                               return 'Por favor, ingrese su correo electrónico';
                             }
-                            // Puedes agregar una validación de formato de correo electrónico aquí si es necesario
                             return null;
                           },
                         ),
@@ -167,21 +173,47 @@ class _LoginState extends State<Login> {
                                     try {
                                       Autenticacion instanciaLogin =
                                           Autenticacion();
-                                      String? token =
+
+                                      Map<String, dynamic>? result =
                                           await instanciaLogin.enviarDatos(
                                               correo.text, contrasena.text);
+                                      if (result != null) {
+                                        String id = result['id'];
+                                        List<String>? roles = result['roles'];
 
-                                      if (token != null) {
-                                        // Autenticación exitosa, navegar a la pantalla Home
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                Home(correo: correo.text),
-                                          ),
-                                        );
+                                        if (roles != null) {
+                                          if (roles.contains('admin')) {
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CitasAdmin(
+                                                        correo: correo.text),
+                                              ),
+                                            );
+                                          } else if (roles
+                                              .contains('estilista')) {
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Estilistas(
+                                                  estilistaId: id,
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Credenciales inválidas'),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          }
+                                        }
                                       } else {
-                                        // Manejar el error en la interfaz de usuario o imprimir un mensaje
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(

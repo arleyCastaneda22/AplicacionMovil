@@ -3,6 +3,8 @@ import 'package:beauty_soft/home/modals/editarServicio.dart';
 import 'package:beauty_soft/login_registro/login.dart';
 import 'package:flutter/material.dart';
 import 'package:beauty_soft/home/modals/nuevaCita.dart';
+import 'package:intl/intl.dart';
+import '../componentes_reutilizables/drawer.dart';
 import '../models/servicios.model.dart';
 import '../services/servicios.dart';
 
@@ -102,40 +104,25 @@ class _HomeState extends State<Home> {
         backgroundColor: const Color.fromRGBO(116, 90, 242, 10),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: const Text("Administrador"),
-              accountEmail: Text(widget.correo ?? ""),
-              currentAccountPicture: const CircleAvatar(
-                backgroundImage: AssetImage('assets/images/usuarioss.png'),
-              ),
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(116, 90, 242, 10),
-              ),
+      drawer: CustomDrawer(
+        correo: widget.correo ?? "",
+        onCitasPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CitasAdmin(),
             ),
-            ListTile(
-              title: const Text("Citas"),
-              leading: const Icon(Icons.event),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CitasAdmin(),
-                  ),
-                );
-              },
+          );
+        },
+        onServicios: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Home(),
             ),
-            ListTile(
-              title: const Text("Cerrar Sesión"),
-              leading: const Icon(Icons.exit_to_app),
-              onTap: () {
-                _confirmarCerrarSesion();
-              },
-            ),
-          ],
-        ),
+          );
+        },
+        onCerrarSesionPressed: _confirmarCerrarSesion,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -195,7 +182,13 @@ class _HomeState extends State<Home> {
                                     Text('Estilistas: $estilistasLista'),
                                     Text(
                                         'Duración: ${servicio.duracion} minutos'),
-                                    Text('Precio: COP ${servicio.precio}'),
+                                    Text(
+                                      'Precio:  ${NumberFormat.currency(
+                                        locale: 'es',
+                                        decimalDigits: 0,
+                                        symbol: '\$',
+                                      ).format(servicio.precio)}',
+                                    ),
                                   ],
                                 ),
                               ),
