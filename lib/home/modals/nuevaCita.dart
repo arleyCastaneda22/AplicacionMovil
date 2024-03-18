@@ -84,6 +84,11 @@ class _NuevaCitaState extends State<NuevaCita> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, ingrese la duración del servicio';
+                  } else {
+                    int? duracionValue = int.tryParse(value);
+                    if (duracionValue == null || duracionValue <= 0) {
+                      return 'La duración debe ser un número entero positivo';
+                    }
                   }
                   return null;
                 },
@@ -112,6 +117,11 @@ class _NuevaCitaState extends State<NuevaCita> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, ingrese el precio del servicio';
+                  } else {
+                    double? precioValue = double.tryParse(value);
+                    if (precioValue == null || precioValue <= 0) {
+                      return 'El precio debe ser un número positivo';
+                    }
                   }
                   return null;
                 },
@@ -230,17 +240,7 @@ class _NuevaCitaState extends State<NuevaCita> {
                       );
                       Navigator.of(context).pop(result);
                     });
-                  } else {
-                    // // Muestra un mensaje de error si algún campo está vacío.
-                    // final scaffoldMessenger = ScaffoldMessenger.of(context);
-                    // scaffoldMessenger.showSnackBar(
-                    //   const SnackBar(
-                    //     content: Text(
-                    //         'Por favor, complete todos los campos y seleccione al menos un estilista.'),
-                    //     backgroundColor: Colors.red,
-                    //   ),
-                    // );
-                  }
+                  } else {}
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(116, 90, 242, 10),

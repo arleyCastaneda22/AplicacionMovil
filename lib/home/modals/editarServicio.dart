@@ -19,6 +19,7 @@ class _EditarServicioState extends State<EditarServicio> {
 
   List<EstilistaModel> selectedEstilistas = [];
   List<EstilistaModel> estilistas = [];
+  EstilistaModel? selectedEstilista;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ServiciosModel? servicio;
@@ -60,6 +61,8 @@ class _EditarServicioState extends State<EditarServicio> {
           padding: const EdgeInsets.all(50.0),
           child: Form(
             key: _formKey,
+             autovalidateMode: AutovalidateMode
+              .onUserInteraction,
             child: Column(
               children: [
                 const Text(
@@ -73,14 +76,14 @@ class _EditarServicioState extends State<EditarServicio> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: nombreServicio,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingrese el nombre del servicio';
-                    } else if (!RegExp(r'^[a-zA-Z ]{3,30}$').hasMatch(value)) {
-                      return 'El nombre del servicio debe contener solo letras y tener entre 3 y 30 caracteres';
-                    }
-                    return null;
-                  },
+                    validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, ingrese el nombre del servicio';
+                  } else if (!RegExp(r'^[a-zA-Z ]{3,30}$').hasMatch(value)) {
+                    return 'El nombre del servicio debe contener solo letras y tener entre 3 y 30 caracteres';
+                  }
+                  return null;
+                },
                   decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
@@ -198,6 +201,14 @@ class _EditarServicioState extends State<EditarServicio> {
                     );
                   }).toList(),
                 ),
+                  if (selectedEstilistas.isEmpty)
+                const Text(
+                  'Por favor, seleccione al menos un estilista.',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 12.0,
+                  ),
+                ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -206,7 +217,11 @@ class _EditarServicioState extends State<EditarServicio> {
                       width: 150,
                       child: ElevatedButton(
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (_formKey.currentState!.validate() &&
+                              nombreServicio.text.isNotEmpty &&
+                              duracion.text.isNotEmpty &&
+                              precio.text.isNotEmpty &&
+                              selectedEstilistas.isNotEmpty) {
                             Servicios serviciosInstance = Servicios();
                             serviciosInstance
                                 .editarServicio(

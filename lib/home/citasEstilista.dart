@@ -22,7 +22,7 @@ class _EstilistasState extends State<Estilistas> {
     _fetchData();
   }
 
-  Future<void> _fetchData() async {
+ Future<void> _fetchData() async {
     setState(() {
       _isLoading = true;
     });
@@ -31,12 +31,12 @@ class _EstilistasState extends State<Estilistas> {
       citas = await Citas().getCitasPorEstilistaId(widget.estilistaId);
       citas.sort((a, b) {
         // Primero, comparamos las fechas
-        final dateComparison = a.fechaCita.compareTo(b.fechaCita);
+        final dateComparison = b.fechaCita.compareTo(a.fechaCita); // Cambio aquí
         if (dateComparison != 0) {
           return dateComparison;
         }
         // Si las fechas son iguales, comparamos las horas
-        return a.horaCita.compareTo(b.horaCita);
+        return b.horaCita.compareTo(a.horaCita); // Cambio aquí
       });
     } catch (error) {
       throw Exception();
