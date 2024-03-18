@@ -107,12 +107,17 @@ class _EditarServicioState extends State<EditarServicio> {
                 TextFormField(
                   controller: duracion,
                   keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingrese la duración del servicio';
+                     validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, ingrese la duración del servicio';
+                  } else {
+                    int? duracionValue = int.tryParse(value);
+                    if (duracionValue == null || duracionValue <= 0) {
+                      return 'La duración debe ser un número entero positivo';
                     }
-                    return null;
-                  },
+                  }
+                  return null;
+                },
                   decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
@@ -136,12 +141,17 @@ class _EditarServicioState extends State<EditarServicio> {
                 TextFormField(
                   controller: precio,
                   keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingrese el precio del servicio';
+                    validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, ingrese el precio del servicio';
+                  } else {
+                    double? precioValue = double.tryParse(value);
+                    if (precioValue == null || precioValue <= 0) {
+                      return 'El precio debe ser un número positivo';
                     }
-                    return null;
-                  },
+                  }
+                  return null;
+                },
                   decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
