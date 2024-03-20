@@ -110,7 +110,10 @@ class _EditarServicioState extends State<EditarServicio> {
                      validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, ingrese la duración del servicio';
-                  } else {
+                  }else if(value.length >3){
+                    return 'Tiempo inválido';
+
+                  }  else {
                     int? duracionValue = int.tryParse(value);
                     if (duracionValue == null || duracionValue <= 0) {
                       return 'La duración debe ser un número entero positivo';

@@ -84,6 +84,9 @@ class _NuevaCitaState extends State<NuevaCita> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, ingrese la duración del servicio';
+                  } else if(value.length >3){
+                    return 'Tiempo inválido';
+
                   } else {
                     int? duracionValue = int.tryParse(value);
                     if (duracionValue == null || duracionValue <= 0) {
